@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>FootballIQ Players</title>
+</head>
+
+<body>
+
+<h1>FootballIQ</h1>
+
+<h2>Players</h2>
+
+{% for player in players %}
+
+<div>
+
+    <h3>
+        <a href="{% url 'player_detail' player.id %}">
+            {{ player.name }}
+        </a>
+    </h3>
+
+    <p>
+        {{ player.position }}
+        |
+        {{ player.club }}
+        |
+        {{ player.nationality }}
+    </p>
+
+</div>
+
+{% empty %}
+
+<p>No players available.</p>
+
+{% endfor %}
+
+</body>
+
+</html>

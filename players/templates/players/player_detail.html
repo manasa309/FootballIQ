@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>{{ player.name }} | FootballIQ</title>
+
+</head>
+
+<body>
+
+<h1>{{ player.name }}</h1>
+
+<p>
+    <strong>Club:</strong>
+    {{ player.club }}
+</p>
+
+<p>
+    <strong>Position:</strong>
+    {{ player.get_position_display }}
+</p>
+
+<p>
+    <strong>Nationality:</strong>
+    {{ player.nationality }}
+</p>
+
+<p>
+    <strong>Preferred Foot:</strong>
+    {{ player.preferred_foot }}
+</p>
+
+<p>
+    <strong>Height:</strong>
+    {{ player.height }} cm
+</p>
+
+<p>
+    {{ player.bio }}
+</p>
+
+</body>
+
+</html>
