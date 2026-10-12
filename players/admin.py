@@ -11,6 +11,7 @@ class PlayerAdmin(admin.ModelAdmin):
         'nationality',
         'club',
         'preferred_foot',
+        'user',
     )
 
     list_filter = (

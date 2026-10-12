@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Player(models.Model):
@@ -49,6 +50,14 @@ class Player(models.Model):
 
     bio = models.TextField(
         blank=True
+    )
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="player_profile",
+        blank=True,
+        null=True,
     )
 
     created_at = models.DateTimeField(

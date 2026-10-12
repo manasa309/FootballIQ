@@ -1,43 +1,33 @@
-<!DOCTYPE html>
-
-<html>
-
-<head>
-    <title>FootballIQ Players</title>
-</head>
-
-<body>
-
-<h1>FootballIQ</h1>
-
-<h2>Players</h2>
-
-{% for player in players %}
-
-<div>
-
-    <h3>
-        <a href="{% url 'player_detail' player.id %}">
-            {{ player.name }}
+{% extends "base.html" %}
+{% block title %}Player directory | Touchline{% endblock %}
+{% block content %}
+<section class="directory-hero page-shell">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> THE PLAYER NETWORK</span>
+    <div class="directory-title-row"><div><h1>Talent is <em>everywhere.</em></h1><p class="hero-intro">Meet the players, explore their profiles, and let performance do the talking.</p></div><div class="directory-count"><strong>{{ players|length }}</strong><span>PROFILES<br>IN THE NETWORK</span></div></div>
+    <form class="filter-bar" method="get" action="{% url 'player_list' %}">
+        <label class="search-field"><span aria-hidden="true">⌕</span><input type="search" name="q" value="{{ query }}" placeholder="Search name, club, nationality..." aria-label="Search players"></label>
+        <label class="select-field"><span class="sr-only">Filter by position</span><select name="position"><option value="">All positions</option>{% for code, label in positions %}<option value="{{ code }}" {% if selected_position == code %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+        <button class="button button-dark filter-submit" type="submit">Find players <span aria-hidden="true">↗</span></button>
+    </form>
+</section>
+<section class="directory-results page-shell">
+    <div class="results-heading"><span>{% if query or selected_position %}MATCHING PLAYERS{% else %}THE COMMUNITY{% endif %}</span><span>{{ players|length }} profile{{ players|length|pluralize }}</span></div>
+    {% if players %}
+    <div class="player-grid">
+        {% for player in players %}
+        <a class="player-card" href="{% url 'player_detail' player.id %}">
+            <div class="player-card-cover"><span class="cover-number">{% if player.position == "GK" %}01{% elif player.position == "ST" %}09{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</span><span class="role-tag">{{ player.get_position_display }}</span><span class="player-card-arrow">↗</span></div>
+            <div class="player-card-body">
+                <div class="player-avatar">{% if player.profile_image %}<img src="{{ player.profile_image.url }}" alt="Portrait of {{ player.name }}">{% else %}<span>{{ player.name|slice:":1" }}</span>{% endif %}</div>
+                <h2>{{ player.name }}</h2><p class="leader-meta">{{ player.club }} <span>·</span> {{ player.nationality }}</p>
+                <div class="player-card-facts"><span>{{ player.get_preferred_foot_display }} foot</span><span>{{ player.height|floatformat:0 }} cm</span></div>
+                <div class="leader-stats"><span><strong>{{ player.total_goals|default:0 }}</strong> GOALS</span><span><strong>{{ player.total_assists|default:0 }}</strong> ASSISTS</span><span><strong>{% if player.average_rating %}{{ player.average_rating|floatformat:1 }}{% else %}—{% endif %}</strong> RATING</span></div>
+            </div>
         </a>
-    </h3>
-
-    <p>
-        {{ player.position }}
-        |
-        {{ player.club }}
-        |
-        {{ player.nationality }}
-    </p>
-
-</div>
-
-{% empty %}
-
-<p>No players available.</p>
-
-{% endfor %}
-
-</body>
-
-</html>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><span class="empty-mark">⌕</span><h3>No players found</h3><p>Try another name or clear the position filter to broaden your search.</p><a class="text-link" href="{% url 'player_list' %}">Clear filters <span aria-hidden="true">↗</span></a></div>
+    {% endif %}
+</section>
+{% endblock %}

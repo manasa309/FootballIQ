@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Sign in | Touchline{% endblock %}
+{% block content %}
+<section class="auth-shell page-shell">
+    <div class="auth-intro"><span class="eyebrow">WELCOME BACK</span><h1>Your next move<br>starts <em>here.</em></h1><p>Sign in to manage your player profile and keep your football story up to date.</p><div class="auth-decoration">T<span>.</span></div></div>
+    <div class="auth-panel"><span class="eyebrow">PLAYER NETWORK</span><h2>Sign in to Touchline</h2><p class="auth-caption">Pick up where you left off.</p>
+        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+        <form method="post" class="site-form">{% csrf_token %}
+            {% for field in form %}<div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}</div>{% endfor %}
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button class="button button-dark form-submit" type="submit">Sign in <span aria-hidden="true">↗</span></button>
+        </form>
+        <p class="auth-switch">New to Touchline? <a href="{% url 'accounts:signup' %}">Create a player profile</a></p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ player.name }} | Touchline{% endblock %}
+{% block content %}
+<section class="edit-shell page-shell">
+    <a class="back-link" href="{% url 'player_detail' player.pk %}"><span aria-hidden="true">←</span> Back to your profile</a>
+    <div class="edit-panel"><span class="eyebrow">KEEP YOUR STORY CURRENT</span><h1>Edit your <em>profile.</em></h1><p class="auth-caption">These details appear on your public Touchline profile.</p>
+        <form method="post" enctype="multipart/form-data" class="site-form edit-form">{% csrf_token %}
+            {% for field in profile_form %}<div class="form-field {% if field.name == 'bio' %}full-field{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}{% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}</div>{% endfor %}
+            <button class="button button-dark form-submit" type="submit">Save changes <span aria-hidden="true">↗</span></button>
+        </form>
+    </div>
+</section>
+{% endblock %}
