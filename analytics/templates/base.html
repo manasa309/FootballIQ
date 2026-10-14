@@ -5,6 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f6f7f2">
+    <script>
+        const savedTheme = localStorage.getItem("touchline-theme");
+        if (["light", "dark", "lavender"].includes(savedTheme)) {
+            document.documentElement.dataset.theme = savedTheme;
+        }
+    </script>
     <title>{% block title %}Touchline | FootballIQ{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,9 +27,10 @@
         <nav class="main-nav" aria-label="Main navigation">
             <a class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Overview</a>
             <a class="{% if request.resolver_match.url_name == 'player_list' or request.resolver_match.url_name == 'player_detail' %}active{% endif %}" href="{% url 'player_list' %}">Players</a>
-            <a href="{% url 'dashboard' %}#insights">Insights</a>
+            <a class="{% if request.resolver_match.url_name == 'analysis' %}active{% endif %}" href="{% url 'analysis' %}">Analytics</a>
         </nav>
         <div class="header-actions">
+            <label class="theme-picker"><span class="sr-only">Interface theme</span><select id="theme-select" aria-label="Interface theme"><option value="light">Light</option><option value="dark">Dark</option><option value="lavender">Lavender</option></select></label>
             {% if user.is_authenticated %}
                 {% if user.player_profile %}<a class="header-cta" href="{% url 'accounts:profile' %}">My profile <span aria-hidden="true">↗</span></a>{% else %}<a class="header-cta" href="{% url 'player_list' %}">Explore talent <span aria-hidden="true">↗</span></a>{% endif %}
                 <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="header-signout" type="submit">Sign out</button></form>
@@ -42,5 +49,13 @@
         <span>Built for the beautiful game. Data for the next move.</span>
         <span class="footer-note">Independent player discovery &amp; performance insights</span>
     </footer>
+    <script>
+        const themeSelect = document.getElementById("theme-select");
+        themeSelect.value = document.documentElement.dataset.theme || "light";
+        themeSelect.addEventListener("change", () => {
+            document.documentElement.dataset.theme = themeSelect.value;
+            localStorage.setItem("touchline-theme", themeSelect.value);
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Player analytics | Touchline{% endblock %}
+{% block content %}
+<section class="analysis-hero page-shell">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> SCOUTING INTELLIGENCE</span>
+    <h1>Performance, <em>in context.</em></h1>
+    <p class="hero-intro">Compare like-for-like player output over a shared date range, competition, and minutes threshold.</p>
+</section>
+
+<section class="analysis-workspace page-shell">
+    <form class="analysis-filters" method="get" action="{% url 'analysis' %}">
+        <div class="analysis-filter-heading"><div><span class="eyebrow">ANALYSIS FILTERS</span><h2>Set your scope</h2></div><a class="text-link" href="{% url 'analysis' %}">Clear filters</a></div>
+        {% if filter_form.non_field_errors %}<div class="form-errors">{{ filter_form.non_field_errors }}</div>{% endif %}
+        <div class="analysis-filter-grid">
+            <label class="form-field"><span>From date</span>{{ filter_form.date_from }}{{ filter_form.date_from.errors }}</label>
+            <label class="form-field"><span>To date</span>{{ filter_form.date_to }}{{ filter_form.date_to.errors }}</label>
+            <label class="form-field"><span>Position</span>{{ filter_form.position }}{{ filter_form.position.errors }}</label>
+            <label class="form-field"><span>Club</span>{{ filter_form.club }}{{ filter_form.club.errors }}</label>
+            <label class="form-field"><span>Competition</span>{{ filter_form.competition }}{{ filter_form.competition.errors }}</label>
+            <label class="form-field"><span>Minimum minutes per match</span>{{ filter_form.min_minutes }}{{ filter_form.min_minutes.errors }}</label>
+        </div>
+        <div class="compare-picker"><label class="form-field"><span>Players to compare</span>{{ filter_form.players }}<small>Select two or more players. The same filters apply to every player and rating trend.</small>{{ filter_form.players.errors }}</label></div>
+        <button class="button button-dark" type="submit">Update analysis <span aria-hidden="true">↗</span></button>
+    </form>
+
+    {% if summary %}
+    <div class="analysis-summary" aria-label="Filtered data summary">
+        <article><span>APPEARANCES</span><strong>{{ summary.matches|default:0 }}</strong></article>
+        <article><span>MINUTES</span><strong>{{ summary.minutes|default:0 }}</strong></article>
+        <article><span>GOALS + ASSISTS</span><strong>{{ summary.goals|default:0 }} + {{ summary.assists|default:0 }}</strong></article>
+        <article><span>AVERAGE RATING</span><strong>{% if summary.average_rating %}{{ summary.average_rating|floatformat:1 }}{% else %}—{% endif %}</strong></article>
+    </div>
+    {% endif %}
+
+    {% if unmatched_players %}
+    <p class="analysis-notice">No matching performance records were found for: {% for player in unmatched_players %}{{ player.name }}{% if not forloop.last %}, {% endif %}{% endfor %}. These players are excluded from the comparison.</p>
+    {% endif %}
+
+    {% if selected_players|length == 1 %}
+    <p class="analysis-notice">Select at least two players to see the comparison.</p>
+    {% elif selected_players|length > 1 %}
+    <section class="comparison-section">
+        <div class="section-heading"><div><span class="eyebrow">HEAD-TO-HEAD</span><h2>Same filters. <em>Side by side.</em></h2></div><span class="muted-label">Per-90 rates use filtered minutes</span></div>
+        <div class="comparison-table-wrap">
+            <table class="comparison-table"><thead><tr><th>PLAYER / POSITION</th><th>MATCHES</th><th>MINUTES</th><th>G / 90</th><th>A / 90</th><th>SHOTS / 90</th><th>KEY PASSES / 90</th><th>TACKLES / 90</th><th>INTERCEPTIONS / 90</th><th>PASS %</th><th>AVG RATING</th><th>G+A / 90</th><th>POSITION PCTL</th></tr></thead><tbody>
+                {% for player in selected_players %}
+                <tr><td><strong>{{ player.player__name }}</strong><small>{{ player.position_group }} · {{ player.player__club }}</small></td><td>{{ player.appearances }}</td><td>{{ player.minutes }}</td><td>{{ player.goals_per_90|floatformat:2 }}</td><td>{{ player.assists_per_90|floatformat:2 }}</td><td>{{ player.shots_per_90|floatformat:2 }}</td><td>{{ player.key_passes_per_90|floatformat:2 }}</td><td>{{ player.tackles_per_90|floatformat:2 }}</td><td>{{ player.interceptions_per_90|floatformat:2 }}</td><td>{% if player.average_pass_completion %}{{ player.average_pass_completion|floatformat:1 }}%{% else %}—{% endif %}</td><td>{% if player.average_rating %}{{ player.average_rating|floatformat:1 }}{% else %}—{% endif %}</td><td>{{ player.goal_contributions_per_90|floatformat:2 }}</td><td>{% if player.position_percentile != None %}{{ player.position_percentile }}th (n={{ player.position_peer_count }}){% else %}Insufficient peers{% endif %}<small>{{ player.percentile_metric_label }}</small></td></tr>
+                {% endfor %}
+            </tbody></table>
+        </div>
+        <div class="chart-card comparison-chart">
+            <div class="chart-heading"><div><span class="eyebrow">RECENT FORM</span><h3>Rating trends · last 10 filtered appearances</h3></div><span class="chart-legend">Rating / 10</span></div>
+            <div class="rating-chart"><div class="chart-y-labels"><span>10</span><span>7.5</span><span>5</span></div><svg viewBox="0 0 300 100" role="img" aria-label="Recent match rating trends for selected players"><line class="chart-gridline" x1="0" y1="10" x2="300" y2="10"></line><line class="chart-gridline" x1="0" y1="48" x2="300" y2="48"></line><line class="chart-gridline" x1="0" y1="86" x2="300" y2="86"></line>{% for trend in rating_trends %}{% if trend.points %}<polyline class="comparison-line comparison-line-{{ forloop.counter0 }}" points="{{ trend.points }}"><title>{{ trend.name }}</title></polyline>{% endif %}{% endfor %}</svg></div>
+            <div class="comparison-legend">{% for trend in rating_trends %}<span class="comparison-legend-{{ forloop.counter0 }}"><i></i>{{ trend.name }}</span>{% endfor %}</div>
+        </div>
+        <p class="analysis-footnote">Position percentiles use a role-specific benchmark: rating for goalkeepers, interceptions per 90 for defenders, key passes per 90 for midfielders, and goal contributions per 90 for attackers. Eligible peers meet the same filters; match counts and peer sample sizes are shown.</p>
+    </section>
+    {% endif %}
+
+    <section class="rankings-section">
+        <div class="section-heading"><div><span class="eyebrow">POSITION-AWARE RANKINGS</span><h2>Output per <em>90 minutes.</em></h2><p class="section-subtitle">Percentiles use role-specific metrics within each broad position group.</p></div></div>
+        {% if player_rows %}
+        <div class="comparison-table-wrap">
+            <table class="comparison-table"><thead><tr><th>PLAYER</th><th>POSITION GROUP</th><th>MATCHES</th><th>MINUTES</th><th>GOALS / 90</th><th>ASSISTS / 90</th><th>TACKLES / 90</th><th>INTERCEPTIONS / 90</th><th>RATING / 10</th><th>G+A / 90</th><th>GROUP PCTL</th></tr></thead><tbody>
+                {% for player in player_rows %}
+                <tr><td><a class="analysis-player-link" href="{% url 'player_detail' player.player_id %}">{{ player.player__name }}</a><small>{{ player.player__club }}</small></td><td>{{ player.position_group }}</td><td>{{ player.appearances }}</td><td>{{ player.minutes }}</td><td>{{ player.goals_per_90|floatformat:2 }}</td><td>{{ player.assists_per_90|floatformat:2 }}</td><td>{{ player.tackles_per_90|floatformat:2 }}</td><td>{{ player.interceptions_per_90|floatformat:2 }}</td><td>{% if player.average_rating %}{{ player.average_rating|floatformat:1 }}{% else %}—{% endif %}</td><td>{{ player.goal_contributions_per_90|floatformat:2 }}</td><td>{% if player.position_percentile != None %}{{ player.position_percentile }}th (n={{ player.position_peer_count }}){% else %}—{% endif %}<small>{{ player.percentile_metric_label }}</small></td></tr>
+                {% endfor %}
+            </tbody></table>
+        </div>
+        {% else %}
+        <div class="empty-state"><span class="empty-mark">⌕</span><h3>No matching performances</h3><p>Adjust the filters to include more match records.</p></div>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

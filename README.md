@@ -24,6 +24,8 @@ Open <http://127.0.0.1:8000/> for the overview, <http://127.0.0.1:8000/players/>
 
 Player pages calculate totals and averages from match-level records, including goals, assists, goal contributions per 90 minutes, passing percentage, and an SVG rating trend. The overview ranks players by goals and rating and summarizes all recorded matches. Ratings and profile data are indicative and depend on their source.
 
+The Analytics page at `/analysis/` supports shared date, position, club, competition, and minimum-minutes filters. It reports position-group per-90 output and compares selected players' attacking, defensive, passing, and rating data over the same filtered appearances. Goal-contribution percentiles use eligible players in the same broad position group and are omitted when there are not enough peers. Choose Light, Dark, or Lavender from the header to save a theme preference in the browser.
+
 ## Data model
 
 - `Player` stores public player profile information.
