@@ -577,3 +577,18 @@ html[data-theme="lavender"] .filter-bar {
     .analysis-summary article strong { font-size: 20px; }
     .analysis-hero h1 { font-size: 38px; }
 }
+/* Lavender theme: complete purple palette */
+html[data-theme="lavender"] { --ink:#2d2439;--muted:#776b87;--paper:#f7f4fc;--line:#e1d6ef;--green:#7656a8;--green-dark:#4d326f;--lime:#d9c8f2;--mint:#ede6f7;--surface:#fff;--surface-soft:#f1ebf8;--surface-raised:#faf8fd;--text-muted:#776b87;--border:#e1d6ef; }
+html[data-theme="lavender"] .eyebrow-dot, html[data-theme="lavender"] .live-dot { background:#9a7bc3; }
+html[data-theme="lavender"] .hero-visual, html[data-theme="lavender"] .pitch-glow { background:#ece5f6; }
+html[data-theme="lavender"] .pitch { border-color:rgba(117,86,168,.34); background:repeating-linear-gradient(90deg,rgba(117,86,168,.025) 0 48px,rgba(117,86,168,.075) 49px 96px); }
+html[data-theme="lavender"] .pitch-half, html[data-theme="lavender"] .pitch-center, html[data-theme="lavender"] .pitch-box, html[data-theme="lavender"] .pitch-spot { border-color:rgba(117,86,168,.38); background-color:#7656a8; }
+html[data-theme="lavender"] .pitch-player { background:#7656a8; box-shadow:0 2px 8px #7656a833; }
+html[data-theme="lavender"] .metric-icon { color:#9a7bc3; }
+html[data-theme="lavender"] .site-message { border-color:#dfd2ef; background:#f2ecfa; color:#5d427f; }
+html[data-theme="lavender"] .rating-chip { background:#eee7f7; color:#5d427f; }
+html[data-theme="lavender"] .button-dark { background:var(--green-dark)!important; color:#fff!important; }
+html[data-theme="lavender"] .button-dark:hover { background:var(--green)!important; color:#fff!important; }
+html[data-theme="lavender"] .comparison-line-0 { stroke:#7656a8; }
+html[data-theme="lavender"] .comparison-legend-0 { color:#7656a8!important; }
+html[data-theme="lavender"] .form-field input:focus, html[data-theme="lavender"] .form-field select:focus, html[data-theme="lavender"] .form-field textarea:focus { border-color:#9a7bc3; box-shadow:0 0 0 3px #7656a818; }

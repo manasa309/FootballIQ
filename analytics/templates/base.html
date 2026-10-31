@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f6f7f2">
     <script>
-        const savedTheme = localStorage.getItem("touchline-theme");
+        const savedTheme = localStorage.getItem("beyond90-theme");
         if (["light", "dark", "lavender"].includes(savedTheme)) {
             document.documentElement.dataset.theme = savedTheme;
         }
     </script>
-    <title>{% block title %}Touchline | FootballIQ{% endblock %}</title>
+    <title>{% block title %}Beyond90 | FootballIQ{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,9 +20,9 @@
 </head>
 <body>
     <header class="site-header">
-        <a class="brand" href="{% url 'dashboard' %}" aria-label="Touchline home">
-            <span class="brand-mark">T</span>
-            <span>touchline<span class="brand-period">.</span></span>
+        <a class="brand" href="{% url 'dashboard' %}" aria-label="Beyond90 home">
+            <span class="brand-mark">B</span>
+            <span>Beyond90<span class="brand-period">.</span></span>
         </a>
         <nav class="main-nav" aria-label="Main navigation">
             <a class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Overview</a>
@@ -45,7 +45,7 @@
         {% block content %}{% endblock %}
     </main>
     <footer class="site-footer">
-        <a class="brand footer-brand" href="{% url 'dashboard' %}"><span class="brand-mark">T</span><span>touchline<span class="brand-period">.</span></span></a>
+        <a class="brand footer-brand" href="{% url 'dashboard' %}"><span class="brand-mark">B</span><span>Beyond90<span class="brand-period">.</span></span></a>
         <span>Built for the beautiful game. Data for the next move.</span>
         <span class="footer-note">Independent player discovery &amp; performance insights</span>
     </footer>
@@ -54,7 +54,7 @@
         themeSelect.value = document.documentElement.dataset.theme || "light";
         themeSelect.addEventListener("change", () => {
             document.documentElement.dataset.theme = themeSelect.value;
-            localStorage.setItem("touchline-theme", themeSelect.value);
+            localStorage.setItem("beyond90-theme", themeSelect.value);
         });
     </script>
 </body>

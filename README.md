@@ -1,6 +1,6 @@
-# Touchline | FootballIQ
+# Beyond90 | FootballIQ
 
-Touchline is a Django football-player network and performance analytics portfolio project. It includes player sign-up and profile editing, a searchable player directory, match-by-match performance records, player analytics, and an admin interface for managing data.
+Beyond90 is a Django football-player network and performance analytics portfolio project. It includes player sign-up and profile editing, a searchable player directory, match-by-match performance records, player analytics, and an admin interface for managing data.
 
 ## Run locally
 

@@ -34,7 +34,7 @@ def signup(request):
                 player.user = user
                 player.save()
             login(request, user)
-            messages.success(request, "Your player profile is live. Welcome to Touchline.")
+            messages.success(request, "Your player profile is live. Welcome to Beyond90.")
             return redirect("player_detail", player_id=player.pk)
 
     return render(
